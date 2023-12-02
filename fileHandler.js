@@ -6,4 +6,9 @@ let getInput = function(name){
    return fs.readFileSync(filePath, {encoding: 'utf-8'});
 }
 
-module.exports = { getInput };
+let getInputArr = function(name){
+   let input = getInput(name)
+   return input.split("\n");
+}
+
+module.exports = { getInput, getInputArr };
