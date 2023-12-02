@@ -22,12 +22,8 @@ for(x of newArr){
         if(parseInt(maybeNum).toString()===char){
             num += maybeNum
         }
-        if(num.length > 1){
-            num = num[0] + (num.length > 1 ? num[num.length-1] : num[0])
-        }else{
-            num = num + num
-        }
     }
+    num = num[0] + num.slice(-1)[0]
     sum+=parseInt(num)
     console.log(num)
 }
