@@ -89,34 +89,3 @@ for([i, line] of [...arr.entries()]){
 }
 
 console.log(sum)
-
-
-
-/*
-
-
-let i = 0;
-let sum = 0;
-let num = "";
-let add = false
-
-for(line of input){
-    let j = 0;
-    for(char of line){
-        if(isNumber(char)){
-            num += char
-            if (checkAround(i, j)){
-                add = true
-            }
-        } else {
-            sum += isNumber(num) && add ? parseInt(num) : 0;
-           // console.log(isNumber(num) && add ? num : "")
-            num = ""
-            add = false
-        }
-        j++
-    }
-    i++
-}
-console.log(sum)
-*/
