@@ -12,17 +12,11 @@ let input = fileHandler.getInputArr('input4.txt')
 
 //split by :, diregard card number
 //split by |, first part + second part
-//map amounts with cards
-let cardAmounts = new Map()
-for(let ca of input){
-    cardAmounts.set(ca, 1)
-}
-
-console.log(cardAmounts)
+//go over second part and see if first part includes it
 sum = 0
 total = 0
 
-for([card, amount] of cardAmounts.entries()){
+for(card of input){
     let cardAndInput = card.split(":")
     let fpluss = cardAndInput[1]
     fpluss = fpluss.trim()
