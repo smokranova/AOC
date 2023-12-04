@@ -1,4 +1,4 @@
-let fileHandler = require('./fileHandler.js')
+let fileHandler = require('../lib/fileHandler.js')
 let input = fileHandler.getInputArr('../inputs/input3.txt')
 // 467835
 
@@ -93,7 +93,6 @@ let checkAround2 = function(i,j){
     if(nums.length == 2) {
         sum = nums[0] * nums[1]
     }
-    console.log(nums)
     return sum
 }
 let isSpecial2 = function(it){
