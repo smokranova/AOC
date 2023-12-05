@@ -1,35 +1,89 @@
+// seeds: 79 14 55 13
+
+// seed-to-soil map:
+// 50 98 2
+// 52 50 48
+
+// soil-to-fertilizer map:
+// 0 15 37
+// 37 52 2
+// 39 0 15
+
+// fertilizer-to-water map:
+// 49 53 8
+// 0 11 42
+// 42 0 7
+// 57 7 4
+
+// water-to-light map:
+// 88 18 7
+// 18 25 70
+
+// light-to-temperature map:
+// 45 77 23
+// 81 45 19
+// 68 64 13
+
+// temperature-to-humidity map:
+// 0 69 1
+// 1 0 69
+
+// humidity-to-location map:
+// 60 56 37
+// 56 93 4
 let fileHandler = require('../lib/fileHandler.js')
-let input = fileHandler.getInputArr('../inputs/input4.txt')
-//13
+let input = fileHandler.getInputArr('../inputs/input5.txt')
 
-// Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
-// Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
-// Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
-// Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
-// Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
-// Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
+let process = function(map, seeds){
+    let newSeeds = []
+    for(seed of seeds){
+        newSeeds.push(map.get(seed) ? map.get(seed) : seed)
+    }   
+    return newSeeds 
+}
 
+let isNumber = function(it){
+    return Number.isInteger(parseInt(it));
+}
 
-//split by :, diregard card number
-//split by |, first part + second part
-//go over second part and see if first part includes it
-sum = 0
-total = 0
+let addNums = function(numbers, map){
+    let destinationRange = numbers[0]
+    let sourceRange = numbers[1]
+    let rangeLen = numbers[2]
+    for(i = 0; i < rangeLen; i++){
+        map.set(sourceRange + i, destinationRange + i)
+    }
+    return map
+}
 
-for(card of input){
-    let cardAndInput = card.split(":")
-    let fpluss = cardAndInput[1]
-    fpluss = fpluss.trim()
-    fpluss = fpluss.split(" | ")
-    let winning = fpluss[0].split(/ +/)
-    let mine = fpluss[1].split(/ +/)
-    
-    for(let n of mine){
-        if(winning.includes(n)){
-            sum = sum == 0 ? 1 : sum * 2
+let getLowest = function(arr){
+    let low = arr[0]
+    for(a of arr){
+        if(a < low){
+            low = a
         }
     }
-    total += sum
-    sum = 0
+    return low
 }
-console.log(total)
+
+let ans = ""
+
+let seedsArr = input[0]
+let seeds = seedsArr.split(": ")[1].split(" ").map(it => parseInt(it))
+let map = new Map()
+//The first line has a destination range start of 50, a source range start of 98, and a range length of 2.
+for(let i = 2; i < input.length; i++){
+    if(isNumber(input[i][0])){
+        let numbers = input[i].split(" ").map(it => parseInt(it))
+        map = addNums(numbers, map)
+    }
+    else if(input[i].length == 1){
+        seeds = process(map, seeds)
+        map = new Map()
+    }
+}
+seeds = process(map, seeds)
+ans = getLowest(seeds)
+//Seed 79, soil 81, fertilizer 81, water 81, light 74, temperature 78, humidity 78, location 82.
+
+console.log(ans)

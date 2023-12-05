@@ -1,5 +1,5 @@
-let fileHandler = require('./lib/fileHandler.js')
-let input = fileHandler.getInput('input00.txt')
+let fileHandler = require('../lib/fileHandler.js')
+let input = fileHandler.getInput('../inputs/input00.txt')
 let arrInput = input.split("\n")
 let totals = []
 let i = 0
