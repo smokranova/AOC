@@ -36,20 +36,9 @@ let input = fileHandler.getInputArr('../inputs/input5.txt')
 
 let process = function(map, seeds){
     let newSeeds = []
-    let isInMap = false
-    let line = []
     for(seed of seeds){
-        for(entry of map){
-            if(seed >= entry[0] && seed < entry[0] + entry[2]){
-                isInMap = true
-                line = entry
-            }
-        }
-        newSeeds.push(isInMap ? seed + line[1] - line[0] : seed);
-        entry = []
-        isInMap = false
-    }
-    
+        newSeeds.push(map.get(seed) ? map.get(seed) : seed)
+    }   
     return newSeeds 
 }
 
@@ -61,7 +50,9 @@ let addNums = function(numbers, map){
     let destinationRange = numbers[0]
     let sourceRange = numbers[1]
     let rangeLen = numbers[2]
-    map.push([sourceRange, destinationRange, rangeLen])
+    for(i = 0; i < rangeLen; i++){
+        map.set(sourceRange + i, destinationRange + i)
+    }
     return map
 }
 
@@ -79,13 +70,7 @@ let ans = ""
 
 let seedsArr = input[0]
 let seeds = seedsArr.split(": ")[1].split(" ").map(it => parseInt(it))
-/*let seeds = []
-for(let i = 0; i < seedsRanges.length; i+=2){
-    for(let j = 0; j < seedsRanges[i+1]; j++){
-        seeds.push(seedsRanges[i] + j)
-    }
-}*/
-let map = []
+let map = new Map()
 //The first line has a destination range start of 50, a source range start of 98, and a range length of 2.
 for(let i = 2; i < input.length; i++){
     if(isNumber(input[i][0])){
@@ -94,14 +79,11 @@ for(let i = 2; i < input.length; i++){
     }
     else if(input[i].length == 1){
         seeds = process(map, seeds)
-        //console.log(seeds)
-        map = []
+        map = new Map()
     }
 }
 seeds = process(map, seeds)
 ans = getLowest(seeds)
-
-//console.log(seeds)
 //Seed 79, soil 81, fertilizer 81, water 81, light 74, temperature 78, humidity 78, location 82.
 
 console.log(ans)
