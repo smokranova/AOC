@@ -1,22 +1,14 @@
 let fileHandler = require('../lib/fileHandler.js')
 let input = fileHandler.getInputArr('../inputs/input3.txt')
-//549908
-
-// 467..114..
-// ...*......
-// ..35..633.
-// ......#...
-// 617*......
-// .....+.58.
-// ..592.....
-// ......755.
-// ...$.*....
-// .664.598..
 let iLen = input[0].length
 let jLen = input.length
 let num = ""
 let add = false
 
+/**
+ * creates a grid that 
+ * @returns 
+ */
 let createGrid = function(){
     let arr = []
     for(let i = 0; i < iLen; i++){

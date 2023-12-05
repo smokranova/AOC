@@ -105,3 +105,8 @@ ans = getLowest(seeds)
 //Seed 79, soil 81, fertilizer 81, water 81, light 74, temperature 78, humidity 78, location 82.
 
 console.log(ans)
+
+
+// for(let i = 0; i < seedsRanges.length; i+=2){
+//     seedsAll.push([seedsRanges[i], seedsRanges[i] + seedsRanges[i+1] - 1])
+// }
