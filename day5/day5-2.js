@@ -89,10 +89,9 @@ for(let j = 0; j < seeds.length; j++){
             seed = process(map, seed)
         }
         ans = ans > seed ? seed : ans
-       // console.log("x", x)
     }
     console.log(s)
     console.log("finished j", j)
 }
 
-console.log("ans:   ", ans)
+console.log("ans: ", ans)
