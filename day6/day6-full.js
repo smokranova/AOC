@@ -8,6 +8,9 @@ let input = fileHandler.getInputArr(`../inputs/input${day}.txt`)
 let time = parseInt(input[0].split(":")[1].replaceAll(" ", ""))
 let dist = parseInt(input[1].split(":")[1].replaceAll(" ", ""))
 
+let times = input[0].split(":")[1].trim().split(/ +/).map(it => parseInt(it))
+let distances = input[1].split(":")[1].trim().split(/ +/).map(it => parseInt(it))
+
 let calcTravelled = function(timePressing, timeLeft){
     let speed = timePressing
     return speed * timeLeft
@@ -24,8 +27,11 @@ let getMaxWins = function(time, dist){
     return total
 }
 let ans = 1
+for(let i = 0; i < times.length; i++){
+    ans *= getMaxWins(times[i], distances[i])
+}
+
+console.log("Part 1:", ans)
 
 ans = getMaxWins(time, dist);
-
-
-console.log(ans)
+console.log("Part 2:", ans)
