@@ -64,14 +64,30 @@ let isXOfAKind = function(set, x){
 }
 
 let is5 = function(set){
-    return checkAmountX(set, 1)
+    if(checkAmountX(set, 1)){
+        return true
+    }
+    let map = getMap(set)
+
+    if(map.size == 2 && [...map.keys()].includes("J")){
+        return true
+    }
+    return false
 }
 
 let is4 = function(set){
     let map = getMap(set)
-    
     if([...map.values()].includes(4)){
         return true
+    }
+    if(map.size == 3 &&  [...map.keys()].includes("J")){
+        let max = 0
+        for(val of map.values()){
+            max = Math.max(val, max)
+        }
+        if(map.get("J") + max >= 4){
+            return true
+        }
     }
     return false
 }
@@ -93,13 +109,23 @@ let checkAmountX = function(set, x){
 
 //technically returns true when shoudlnt but that might be ok
 let isFullHouse = function(set){
-    return checkAmountX(set, 2)
+    if(checkAmountX(set, 2)){
+        return true
+    }
+    let map = getMap(set)
+    if(map.size == 3 && [...map.keys()].includes("J")){
+        return true
+    }
+    return false
 }
 
 let is3 = function(set){
     let map = getMap(set)
     
     if([...map.values()].includes(3)){
+        return true
+    }
+    if([...map.keys()].includes("J") && map.size == 4){
         return true
     }
     return false
@@ -110,7 +136,14 @@ let twoPair = function(set){
 }
 
 let onePair = function(set){
-    return checkAmountX(set, 4)
+    if(checkAmountX(set, 4)){
+        return true
+    }
+    let map = getMap(set)
+    if([...map.keys()].includes("J")){
+        return true
+    }
+    return false
 }
 
 let allDif = function(set){
@@ -129,6 +162,8 @@ let checkRank = function(set){
         vals.push(f(set))
     }
     rank = vals.indexOf(true)
+    console.log(set, rank)
+
     return rank
 }
 
@@ -158,31 +193,25 @@ let customSort = function([set1, bid1], [set2, bid2]){
     }
 }
 
-// 32T3K is the only one pair and the other hands are all a stronger type, so it gets rank 1.
-// KK677 and KTJJT are both two pair. Their first cards both have the same label, but the second card of KK677 is stronger (K vs T), so KTJJT gets rank 2 and KK677 gets rank 3.
-// T55J5 and QQQJA are both three of a kind. QQQJA has a stronger first card, so it gets rank 5 and T55J5 gets rank 4.
-//[is5, is4, isFullHouse, is3, twoPair, onePair, allDif]
-// 32T3K 765 rank orig = 5
-// T55J5 684 rank orig = 3 -/> wrong (is getting 4?)
-// KK677 28 rank orig = 4
-// KTJJT 220 rank orig = 4
-// QQQJA 483 rank orig = 3
-// 55555 0 (should be 0)
-// 5A888 4 should be 3
-// A5555 2 shpuld be 1
+// 32T3K is still the only one pair; it doesn't contain any jokers, so its strength doesn't increase.
+// KK677 is now the only two pair, making it the second-weakest hand.
+// T55J5, KTJJT, and QQQJA are now all four of a kind! T55J5 gets rank 3, QQQJA gets rank 4, and KTJJT gets rank 5.
+// let rankChecks = [is5, is4, isFullHouse, is3, twoPair, onePair, allDif]
+//                     0   1        2        3     4        5        6
+// 32T3K 765 -> 5
+// T55J5 684 -> 1
+// KK677 28  -> 4
+// KTJJT 220 -> 1
+// QQQJA 483 -> 1
 
 
-// 765, 684, 483, 220, 28 mine
-// 765, 220, 28, 684, 483 correct
-
-// (765 * 1 + 220 * 2 + 28 * 3 + 684 * 4 + 483 * 5)
-// 6440
-
+//5905
 let calcAns = function(arr){
     let bids = arr.map(it => it[1])
     console.log(bids)
     return bids.reduce((p, c, i) => parseInt(p) + parseInt(c) * (i+1))
 }
+
 
 let ans = ""
 input = input.map(it => it.split(" "))
