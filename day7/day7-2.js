@@ -120,7 +120,7 @@ let allDif = function(set){
 let rankChecks = [is5, is4, isFullHouse, is3, twoPair, onePair, allDif]
 
 
-let cardTypes = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
+let cardTypes = ["A", "K", "Q", "T", "9", "8", "7", "6", "5", "4", "3", "2", "J"]
 
 let checkRank = function(set){
     let rank = 0
