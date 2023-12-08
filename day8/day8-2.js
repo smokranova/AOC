@@ -16,7 +16,7 @@ let process = function(el){
 // GGG = (GGG, GGG)
 // ZZZ = (ZZZ, ZZZ)
 
-let ans = ""
+let ans = 0
 let map = new Map()
 
 let steps = input[0].trim()
@@ -35,19 +35,36 @@ for(line of input.slice(2)){
 console.log(startPos)
 
 let step = 0
-let pos = "AAA"
 let i = 0
+let res = []
 
-
-while(pos != "ZZZ"){
-    pos = map.get(pos)[stepIndex[step]]
-    i++
-    step++
-    if(step >= stepIndex.length){
-        step = 0
+for(pos of startPos){
+    while(!pos.endsWith("Z")){
+        pos = map.get(pos)[stepIndex[step]]
+        i++
+        step++
+        if(step >= stepIndex.length){
+            step = 0
+        }
     }
+    res.push(i)
+    i = 0
 }
-ans = i
+console.log(res)
+
+let lcm = function(a, b) {
+    const den = gcd(a, b);
+    return (a * b) / den;
+}
+
+let gcd = function(a, b) { 
+    for (let x = b; b > 0;) { 
+        b = a % b; 
+        a = x; 
+        x = b; 
+    } 
+    return a; 
+} 
 
 
-console.log(ans)
+console.log(res.reduce((a, b) => lcm(a, b)))
