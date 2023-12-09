@@ -24,12 +24,7 @@ let process = function(line){
 }
 
 let allZero = function(line){
-    for(el of line){
-        if(el != 0){
-            return false
-        }
-    }
-    return true
+    return line.every(x => x == 0)
 }
 
 let getDif = function(line){
