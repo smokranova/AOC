@@ -22,37 +22,9 @@ class Graph {
         //this.children.get(w).add(v)
     }
 
-    // dfs(startingNode){
-    //     let visited = new Map();
-    //     return this.DFSUtil(startingNode, visited, undefined);
-    // }
-
-    // DFSUtil(vert, visited, prev){
-    //     count++
-    //     visited.set(vert, true)
-    //     console.log(vert.print(), count);
-    
-    //     let get_neighbours = this.children.get(vert);
-    //     if(count > 13000){
-    //         console.log("hellooooo")
-    //     }
-    
-    //     for (let node of get_neighbours) {
-    //         let get_elem = node;
-    //         let vis = visited.get(get_elem)
-    //         if (!vis){
-    //             return this.DFSUtil(get_elem, visited, vert);
-    //         }
-    //         if(node != prev){
-    //             return true
-    //         }
-    //     }
-    //     return false;
-    // }  
     dfs(startingNode) {
         let visited = new Map();
         let stack = [];
-        let ans = false
         stack.push({ node: startingNode, prev: undefined });
     
         while (stack.length > 0) {
@@ -68,14 +40,11 @@ class Graph {
                     let vis = visited.get(get_elem);
                     if (!vis) {
                         stack.push({ node: get_elem, prev: node });
-                    } else if (get_elem !== prev) {
-                        ans = true;
                     }
                 }
             }
         }
-    
-        return ans;
+        return visited
     }
 
     printGraph()
@@ -209,7 +178,205 @@ for(line of input){
     i++
 }
 
-//graph.printGraph()
-console.log(graph.dfs(start))
 
-console.log(count / 2)
+//graph.printGraph()
+let mapVis = graph.dfs(start)
+console.log("Part1: ", count / 2)
+
+input = input.map(line => line.split(""))
+
+let corners = ["L", "F", "J", "7"]
+
+let shoot = function(x, y){
+    //== is free
+    //if true that means it is O otherwise I
+    return shootDown(x, y) && shootLeft(x, y) && shootRight(x, y) && shootUp(x, y) //|| false
+}
+
+let matching = function(corns){
+    corns = corns.sort()
+    return (corns[0] == "7" && corns[1] == "F") 
+    || (corns[0] == "J" && corns[1] == "L") 
+    || (corns[0] == "F" && corns[1] == "L") 
+    || (corns[0] == "7" && corns[1] == "J")
+}
+
+let shootDown = function(x, y){
+    let j = y
+    //iterate over all above x
+    let count = 0
+    for(let i = x; i < input.length; i++){
+        let node = nodes.get(`${j};!${i}`)
+        let checking = input[i][j]
+        if(mapVis.get(node) != undefined){
+            if(corners.includes(checking)){
+                let corns = []
+                corns.push(checking)
+                i++
+                let node = nodes.get(`${j};!${i}`)
+                while(i < input.length && !corners.includes(input[i][j])){
+                    i++
+                    node = nodes.get(`${j};!${i}`)
+                    
+                }
+                checking = input[i][j]
+                corns.push(checking)
+                if(matching(corns)){
+                    count += 2
+                }else{
+                    count++
+                }
+            //if it is in mapVis and also is a corner i have to do something else
+            }else{
+                //if the one i am checking is part of the mapVis and is not a corner i just add 1
+                count++
+            }
+
+        }
+    }
+    return count % 2 == 0 //is even
+}
+
+let shootRight = function(x, y){
+    let i = x
+    //iterate over all above x
+    let count = 0
+    for(let j = y; j < input[i].length; j++){
+        let node = nodes.get(`${j};!${i}`)
+        let checking = input[i][j]
+        if(mapVis.get(node) != undefined){
+            if(corners.includes(checking)){
+                let corns = []
+                corns.push(checking)
+                j++
+                let node = nodes.get(`${j};!${i}`)
+                while(j < input[x].length && !corners.includes(input[i][j])){
+                    j++
+                    node = nodes.get(`${j};!${i}`)
+                }
+                checking = input[i][j]
+                corns.push(checking)
+                if(matching(corns)){
+                    count += 2
+                }else{
+                    count++
+                }
+            //if it is in mapVis and also is a corner i have to do something else
+            }else{
+                //if the one i am checking is part of the mapVis and is not a corner i just add 1
+                count++
+            }
+
+        }
+    }
+    return count % 2 == 0 //is even
+}
+
+let shootLeft = function(x, y){
+    let i = x
+    //iterate over all above x
+    let count = 0
+    for(let j = y; j >= 0; j--){
+        let node = nodes.get(`${j};!${i}`)
+        let checking = input[i]
+        checking = checking[j]
+        if(mapVis.get(node) != undefined){
+            if(corners.includes(checking)){
+                let corns = []
+                corns.push(checking)
+                j--
+                let node = nodes.get(`${j};!${i}`)
+                while(j >= 0 && !corners.includes(input[i][j])){
+                    j--
+                    node = nodes.get(`${j};!${i}`)
+                }
+                checking = input[i][j]
+                corns.push(checking)
+                if(matching(corns)){
+                    count += 2
+                }else{
+                    count++
+                }
+            //if it is in mapVis and also is a corner i have to do something else
+            }else{
+                //if the one i am checking is part of the mapVis and is not a corner i just add 1
+                count++
+            }
+
+        }
+    }
+    return count % 2 == 0 
+}
+
+let shootUp = function(x, y){
+    let j = y
+    //iterate over all above x
+    let count = 0
+    for(let i = x; i >= 0; i--){
+        let node = nodes.get(`${j};!${i}`)
+        let checking = input[i]
+        checking = checking[j]
+        if(mapVis.get(node) != undefined){
+            if(corners.includes(checking)){
+                let corns = []
+                corns.push(checking)
+                i--
+                let node = nodes.get(`${j};!${i}`)
+                while(i >= 0 && !corners.includes(input[i][j])){
+                    i--
+                    node = nodes.get(`${j};!${i}`)
+                }
+                checking = input[i][j]
+                corns.push(checking)
+                if(matching(corns)){
+                    count += 2
+                }else{
+                    count++
+                }
+            //if it is in mapVis and also is a corner i have to do something else
+            }else{
+                //if the one i am checking is part of the mapVis and is not a corner i just add 1
+                count++
+            }
+
+        }
+    }
+    return count % 2 == 0 
+}
+
+i = 0
+let ans2 = 0
+console.log(shootRight(4,10))
+console.log(shootDown(4,10))
+console.log(shootUp(4,10))
+console.log(shootLeft(4,10))
+
+input[start.y][start.x] = "|"
+for(let line of input){
+    let j = 0
+    for(let el of line){
+        let node = nodes.get(`${j};!${i}`)
+        if(mapVis.get(node) === undefined){
+            let shot = shoot(i, j)
+            console.log(i, j, el, shot)
+            if(!shot){
+                ans2++
+            }
+        }
+        j++
+    }
+    i++
+}
+console.log("Part2: ", ans2)
+
+// for(visitedNode of mapVis){
+//     //console.log(visitedNode[0].print())
+//     let y = visitedNode[0].y
+//     let x = visitedNode[0].x
+//     output[y][x] = "X"
+// }
+
+// for(let x of output){
+//     console.log(x.join(""))
+// }
+

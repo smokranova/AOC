@@ -9,10 +9,12 @@ let process = function(el){
 let ans = ""
 let i = 0
 
+let output = input
+
 for(line of input){
     let j = 0
     for(el of line){
-        process(el)
+        output[el[0].y][el[0].x] = "X"
         j++
     }
     i++
