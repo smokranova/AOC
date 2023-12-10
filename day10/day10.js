@@ -2,9 +2,7 @@ let day = "10"
 let fileHandler = require('../lib/fileHandler.js')
 let input = fileHandler.getInputArr(`../inputs/input${day}.txt`)
 
-let process = function(el){
-
-}
+let count = 0
 
 class Graph {
     // defining vertex array and
@@ -26,21 +24,34 @@ class Graph {
 
     dfs(startingNode){
         let visited = new Map();
-        this.DFSUtil(startingNode, visited);
+        return this.DFSUtil(startingNode, visited, undefined);
     }
 
-    DFSUtil(vert, visited){
+// Run a Depth First Traversal on the given subgraph connected to the current node and pass the parent of the current node. In each recursive 
+// Set visited[root] as 1.
+// Iterate over all adjacent nodes of the current node in the adjacency list 
+// If it is not visited then run DFS on that node and return true if it returns true.
+// Else if the adjacent node is visited and not the parent of the current node then return true.
+// Return false.
+
+    DFSUtil(vert, visited, prev){
+        count++
         visited.set(vert, true)
-        console.log(vert.print());
+        //console.log(vert.print());
     
         let get_neighbours = this.children.get(vert);
     
         for (let node of get_neighbours) {
             let get_elem = node;
             let vis = visited.get(get_elem)
-            if (!vis)
-                this.DFSUtil(get_elem, visited);
+            if (!vis){
+                return this.DFSUtil(get_elem, visited, vert);
+            }
+            if(node != prev){
+                return true
+            }
         }
+        return false;
     }  
 
     printGraph()
@@ -152,9 +163,9 @@ let getNeighbours = function(i, j, el){
                     if(n!= undefined) {neighbours.push(n)}
                 }
             }
+            console.log("b")
             break;
         default:
-          console.log(`sus and odd: ${el}`);
       }
       if(node1 !== undefined) {neighbours.push(node1)}
       if(node2 !== undefined) {neighbours.push(node2)}
@@ -183,7 +194,7 @@ for(line of input){
     i++
 }
 
-graph.printGraph()
-graph.dfs(start)
+//graph.printGraph()
+console.log(graph.dfs(start))
 
-console.log(ans)
+console.log(count / 2)
