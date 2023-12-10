@@ -22,37 +22,61 @@ class Graph {
         //this.children.get(w).add(v)
     }
 
-    dfs(startingNode){
+    // dfs(startingNode){
+    //     let visited = new Map();
+    //     return this.DFSUtil(startingNode, visited, undefined);
+    // }
+
+    // DFSUtil(vert, visited, prev){
+    //     count++
+    //     visited.set(vert, true)
+    //     console.log(vert.print(), count);
+    
+    //     let get_neighbours = this.children.get(vert);
+    //     if(count > 13000){
+    //         console.log("hellooooo")
+    //     }
+    
+    //     for (let node of get_neighbours) {
+    //         let get_elem = node;
+    //         let vis = visited.get(get_elem)
+    //         if (!vis){
+    //             return this.DFSUtil(get_elem, visited, vert);
+    //         }
+    //         if(node != prev){
+    //             return true
+    //         }
+    //     }
+    //     return false;
+    // }  
+    dfs(startingNode) {
         let visited = new Map();
-        return this.DFSUtil(startingNode, visited, undefined);
-    }
-
-// Run a Depth First Traversal on the given subgraph connected to the current node and pass the parent of the current node. In each recursive 
-// Set visited[root] as 1.
-// Iterate over all adjacent nodes of the current node in the adjacency list 
-// If it is not visited then run DFS on that node and return true if it returns true.
-// Else if the adjacent node is visited and not the parent of the current node then return true.
-// Return false.
-
-    DFSUtil(vert, visited, prev){
-        count++
-        visited.set(vert, true)
-        //console.log(vert.print());
+        let stack = [];
+        let ans = false
+        stack.push({ node: startingNode, prev: undefined });
     
-        let get_neighbours = this.children.get(vert);
+        while (stack.length > 0) {
+            let { node, prev } = stack.pop();
     
-        for (let node of get_neighbours) {
-            let get_elem = node;
-            let vis = visited.get(get_elem)
-            if (!vis){
-                return this.DFSUtil(get_elem, visited, vert);
-            }
-            if(node != prev){
-                return true
+            if (!visited.get(node)) {
+                visited.set(node, true);
+                count++;
+    
+                let get_neighbours = Array.from(this.children.get(node));    
+                for (let z = get_neighbours.length - 1; z >= 0; z--) {
+                    let get_elem = get_neighbours[z];
+                    let vis = visited.get(get_elem);
+                    if (!vis) {
+                        stack.push({ node: get_elem, prev: node });
+                    } else if (get_elem !== prev) {
+                        ans = true;
+                    }
+                }
             }
         }
-        return false;
-    }  
+    
+        return ans;
+    }
 
     printGraph()
 {
@@ -156,15 +180,6 @@ let getNeighbours = function(i, j, el){
             node1 = nodes.get(`${j+1};!${i}`)
             node2 = nodes.get(`${j};!${i+1}`)
             break;
-          case 'S':
-            for(let y = i -1; y < i + 1; y++){
-                for(let x = j - 1; x < j + 1; x++){
-                    let n = nodes.get(`${x};!${y}`)
-                    if(n!= undefined) {neighbours.push(n)}
-                }
-            }
-            console.log("b")
-            break;
         default:
       }
       if(node1 !== undefined) {neighbours.push(node1)}
@@ -181,7 +196,7 @@ for(line of input){
         let v = nodes.get(`${j};!${i}`)
         if(el == "S"){
             start = nodes.get(`${j};!${i}`)
-            el = "F"
+            el = "|"
         }
         let ws = getNeighbours(i, j, el)
         for(w of ws){
