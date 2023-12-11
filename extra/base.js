@@ -14,7 +14,7 @@ let output = input
 for(line of input){
     let j = 0
     for(el of line){
-        output[el[0].y][el[0].x] = "X"
+        process(el)
         j++
     }
     i++
